@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Basic Quiz</title>
+<style>
+  body {
+    font-family: Arial, sans-serif;
+    background: #f2f2f2;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    margin: 0;
+  }
+  .quiz-box {
+    background: white;
+    padding: 20px 30px;
+    border-radius: 10px;
+    width: 320px;
+    box-shadow: 0 0 10px rgba(0,0,0,0.2);
+  }
+  h2 { margin-top: 0; }
+  button {
+    display: block;
+    width: 100%;
+    margin: 8px 0;
+    padding: 10px;
+    border: none;
+    border-radius: 5px;
+    background: #e9e9e9;
+    cursor: pointer;
+    font-size: 15px;
+  }
+  button:hover { background: #ddd; }
+  #next-btn {
+    background: #4CAF50;
+    color: white;
+    display: none;
+  }
+</style>
+</head>
+<body>
+
+<div class="quiz-box">
+  <h2 id="question">Question</h2>
+  <div id="options"></div>
+  <button id="next-btn" onclick="nextQuestion()">Next</button>
+</div>
+
+<script>
+const quiz = [
+  {
+    question: "What does HTML stand for?",
+    options: ["Hyper Trainer Marking Language", "Hyper Text Markup Language", "Hyper Text Marketing Language"],
+    answer: 1
+  },
+  {
+    question: "Which tag is used for a paragraph?",
+    options: ["<p>", "<para>", "<pg>"],
+    answer: 0
+  },
+  {
+    question: "Which language is used for styling web pages?",
+    options: ["HTML", "JQuery", "CSS"],
+    answer: 2
+  }
+];
+
+let current = 0;
+
+function loadQuestion() {
+  const q = quiz[current];
+  document.getElementById("question").innerText = q.question;
+  const optionsDiv = document.getElementById("options");
+  optionsDiv.innerHTML = "";
+  document.getElementById("next-btn").style.display = "none";
+
+  q.options.forEach((option, index) => {
+    const btn = document.createElement("button");
+    btn.innerText = option;
+    btn.onclick = () => selectAnswer(index);
+    optionsDiv.appendChild(btn);
+  });
+}
+
+function selectAnswer(index) {
+  const q = quiz[current];
+  const buttons = document.querySelectorAll("#options button");
+
+  buttons.forEach((btn, i) => {
+    btn.disabled = true;
+    if (i === q.answer) btn.style.background = "lightgreen";
+    else if (i === index) btn.style.background = "salmon";
+  });
+
+  document.getElementById("next-btn").style.display = "block";
+}
+
+function nextQuestion() {
+  current++;
+  if (current < quiz.length) {
+    loadQuestion();
+  } else {
+    document.querySelector(".quiz-box").innerHTML = "<h2>Quiz Finished!</h2>";
+  }
+}
+
+loadQuestion();
+</script>
+
+</body>
+</html>
